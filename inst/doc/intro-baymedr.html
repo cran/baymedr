@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Maximilian Linde" />
+
+<meta name="date" content="2019-10-17" />
+
+<title>Introduction to baymedr</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to baymedr</h1>
+<h4 class="author">Maximilian Linde</h4>
+<h4 class="date">2019-10-17</h4>
+
+
+
+<div id="baymedr-bayesian-inference-for-medical-designs-in-r" class="section level1">
+<h1>baymedr: BAYesian inference for MEDical designs in R</h1>
+<p><code>baymedr</code> is an R package with the goal of providing researchers with easy-to-use tools for the computation of Bayes factors for common biomedical research designs (see van Ravenzwaaij et al., 2019). Implemented are functions to test the equivalence (<code>equiv_bf()</code>), non-inferiority (<code>infer_bf()</code>), and superiority (<code>super_bf()</code>) of an experimental group (e.g., a new medication) compared to a control group (e.g., a placebo or an already existing medication). A special focus of <code>baymedr</code> lies on a user-friendly interface, so that a wide variety or researchers (i.e., not only statisticians) can utilise <code>baymedr</code> for their analyses.</p>
+<p>The Bayesian approach to inference has several advantages over the conventional frequentist approach. To mention only a few, with Bayesian inference it is legitimate to monitor results during data collection and decide to stop or continue data collection based on the inspection of interim analyses. This is considered a bad practice within the frequentist framework because it would result in an inflated Type I error rate (e.g., Schönbrodt et al., 2017). Furthermore, null hypothesis significance tests and the corresponding <em>p</em>-values do not allow for the quantification of evidence for the null hypothesis (e.g., Wagenmakers et al., 2018). The Bayesian framework remedies this shortcoming, which is particularly important for the equivalence design (van Ravenzwaaij et al., 2019). Lastly, in some situations the frequentist approaches to equivalence and non-inferiority tests bear certain interpretational ambiguities. For instance, when the confidence interval of the difference between the two group means fully lies between the non-inferiority margin and 0, this means that the experimental group is non-inferior with regard to the non-inferiority margin but inferior with regard to 0. The same applies to the equivalence design (van Ravenzwaaij et al., 2019). Fortunately, these ambiguities are fully resolved within the Bayesian framework. For a more thorough discussion of Bayesian advantages, see, for example, Wagenmakers et al. (2018).</p>
+<div id="general-usage" class="section level2">
+<h2>General usage</h2>
+<p>All three functions for the three research designs (i.e., equivalence, non-inferiority, and superiority) allow the user to compute Bayes factors based on raw data (if arguments <code>x</code> and <code>y</code> are defined) or summary statistics (if arguments <code>n_x</code>, <code>n_y</code>, <code>mean_x</code>, <code>mean_y</code>, <code>sd_x</code>, and <code>sd_y</code> are defined). If summary statistics are used, the user has the option to specify <code>ci_margin</code> and <code>ci_level</code> instead of <code>sd_x</code> and <code>sd_y</code>. In general, arguments with ‘x’ as a name or suffix correspond to the control group and those with ‘y’ as a name or suffix refer to the experimental group.</p>
+<p>Usage of the functions for equivalence (<code>equiv_bf()</code>), non-inferiority (<code>infer_bf()</code>), and superiority designs (<code>super_bf()</code>), results in S4 objects of classes <code>baymedrEquivalence</code>, <code>baymedrNonInferiority</code>, and <code>baymedrSuperiority</code>, respectively. Summary information are shown in the console by printing the created S4 object. To extract the Bayes factor from one of the three S4 objects, use the function <code>get_bf()</code>.</p>
+<p>The Bayes factors resulting from <code>super_bf()</code> and <code>infer_bf()</code> quantify evidence in favour of the alternative hypothesis (i.e., superiority and non-inferiority, respectively), which is indicated by BF01. In contrast, the Bayes factor resulting from <code>equiv_bf()</code> quantifies evidence in favour of the null hypothesis (i.e., equivalence), indicated by BF01. In case the evidence for the other hypothesis is desired, the user can take the reciprocal of the Bayes factor (i.e., BF01 = 1 / BF10 and BF10 = 1 / BF01).</p>
+</div>
+<div id="the-cauchy-prior-distribution" class="section level2">
+<h2>The Cauchy prior distribution</h2>
+<p>Bayesian inference requires the specification of a prior distribution, which mirrors prior beliefs about the likelihood of parameter values. For the equivalence, non-inferiority, and superiority tests, the parameter of interest is the effect size between the experimental and control conditions (see, e.g., Rouder et al., 2009; van Ravenzwaaij et al., 2019). If relevant information is available, this knowledge could be expressed in an idiosyncratic prior distribution. Most of the time, however, relevant information is missing. In that case, it is reasonable to define a prior distribution that is as objective as possible. It has been argued that the Cauchy probability density function represents such a function (see, e.g., Rouder et al., 2009). The standard Cauchy distribution resembles a standard Normal distribution, except that the Cauchy distribution has less mass at the centre but instead heavier tails. The centre of the distribution is determined by the location parameter, while the width is specified by the scale parameter. By varying the scale of the Cauchy prior, the user can change the range of reasonable effect sizes. This is accomplished with the argument <code>prior_scale</code>.</p>
+</div>
+<div id="random-example-data" class="section level2">
+<h2>Random example data</h2>
+<p>In order to demonstrate the three functions within <code>baymedr</code>, we create an example dataset (data). There is a control group “con” and an experimental group “exp” (condition). Further, random numbers, sampled from the Normal distribution, within each group are created, serving as the dependent variable of interest (dv):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">123456789</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="dt">condition =</span> <span class="kw">rep</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;con&quot;</span>, <span class="st">&quot;exp&quot;</span>),</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">                  <span class="kw">c</span>(<span class="dv">150</span>, <span class="dv">180</span>)),</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="dt">dv =</span> <span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">150</span>,</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">               <span class="dt">mean =</span> <span class="fl">7.3</span>,</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">               <span class="dt">sd =</span> <span class="fl">3.4</span>),</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">         <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">180</span>,</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">               <span class="dt">mean =</span> <span class="fl">8.9</span>,</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">               <span class="dt">sd =</span> <span class="fl">3.1</span>))</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">)</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">data[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">151</span><span class="op">:</span><span class="dv">155</span>), ]</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co">#&gt;     condition        dv</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="co">#&gt; 1         con  9.016566</span></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co">#&gt; 2         con  8.645978</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt; 3         con 12.112828</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt; 4         con  4.844097</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co">#&gt; 5         con  5.197586</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co">#&gt; 151       exp  8.541017</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt; 152       exp 10.693952</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt; 153       exp 12.782147</span></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co">#&gt; 154       exp  9.094879</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt; 155       exp  7.347376</span></a></code></pre></div>
+</div>
+<div id="the-superiority-test-super_bf" class="section level2">
+<h2>The superiority test (<code>super_bf()</code>)</h2>
+<p>With <code>super_bf()</code> we can test whether the experimental group is better than the control group. Importantly, sometimes low and sometimes high values on the measure of interest represent superiority, which can be specified with the argument <code>direction</code>. The default is that high values represent superiority. Moreover, research practices diverge on whether a one-tailed test should be conducted or a two-tailed test with subsequent confirmation that the results follow the expected direction. This can be specified with the argument <code>alternative</code>, for which the default is a one-sided test.</p>
+<p>We can use the raw data to compute a Bayes factor:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mod_super_raw &lt;-<span class="st"> </span><span class="kw">super_bf</span>(</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">x =</span> data<span class="op">$</span>dv[data<span class="op">$</span>condition <span class="op">==</span><span class="st"> &quot;con&quot;</span>],</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">y =</span> data<span class="op">$</span>dv[data<span class="op">$</span>condition <span class="op">==</span><span class="st"> &quot;exp&quot;</span>]</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">mod_super_raw</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; Superiority analysis</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; --------------------</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; Data:                         raw data</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; H0 (non-superiority):         mu_y == mu_x</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; H1 (superiority):             mu_y &gt; mu_x</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; Cauchy prior scale:           0.707</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt;     BF10 (superiority) = 44.00</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="kw">get_bf</span>(<span class="dt">object =</span> mod_super_raw)</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; [1] 44.00176</span></a></code></pre></div>
+<p>Alternatively, if the raw data are not available, we can use summary statistics to compute a Bayes factor (cf. van Ravenzwaaij et al., 2019). The data were obtained from Skjerven et al. (2013):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mod_super_sum &lt;-<span class="st"> </span><span class="kw">super_bf</span>(</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="dt">n_x =</span> <span class="dv">201</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">n_y =</span> <span class="dv">203</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">mean_x =</span> <span class="fl">68.1</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">mean_y =</span> <span class="fl">63.6</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">ci_margin =</span> (<span class="fl">15.5</span> <span class="op">-</span><span class="st"> </span>(<span class="op">-</span><span class="fl">6.5</span>)) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="dt">ci_level =</span> <span class="fl">0.95</span>,</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="dt">direction =</span> <span class="st">&quot;low&quot;</span>,</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">  <span class="dt">alternative =</span> <span class="st">&quot;one.sided&quot;</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">mod_super_sum</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; Superiority analysis</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; --------------------</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; Data:                         summary data</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; H0 (non-superiority):         mu_y == mu_x</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; H1 (superiority):             mu_y &lt; mu_x</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; Cauchy prior scale:           0.707</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;     BF10 (superiority) = 0.24</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="kw">get_bf</span>(<span class="dt">object =</span> mod_super_sum)</a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; [1] 0.2364177</span></a></code></pre></div>
+</div>
+<div id="the-equivalence-test-equiv_bf" class="section level2">
+<h2>The equivalence test (<code>equiv_bf()</code>)</h2>
+<p>With <code>equiv_bf()</code> we can test whether the experimental and the control groups are equivalent. With the argument <code>interval</code>, an equivalence interval can be specified. The argument <code>interval_std</code> can be used to specify whether the equivalence interval is given in standardised (TRUE; the default) or unstandardised (FALSE) units. However, in contrast to the frequentist equivalence test, <code>equiv_bf()</code> can also incorporate a point null hypothesis, which constitutes the default in <code>equiv_bf()</code> (i.e., <code>interval</code> = 0).</p>
+<p>We can use the raw data to compute a Bayes factor:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod_equiv_raw &lt;-<span class="st"> </span><span class="kw">equiv_bf</span>(</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="dt">x =</span> data<span class="op">$</span>dv[data<span class="op">$</span>condition <span class="op">==</span><span class="st"> &quot;con&quot;</span>],</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="dt">y =</span> data<span class="op">$</span>dv[data<span class="op">$</span>condition <span class="op">==</span><span class="st"> &quot;exp&quot;</span>],</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">interval =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">mod_equiv_raw</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; Equivalence analysis</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; --------------------</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; Data:                         raw data</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; H0 (equivalence):             mu_y - mu_x &gt; c_low AND mu_y - mu_x &lt; c_high</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; H1 (non-equivalence):         mu_y - mu_x &lt; c_low OR mu_y - mu_x &gt; c_high</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; Equivalence interval:         Lower = -0.10; Upper = 0.10 (standardised)</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;                               Lower = -0.33; Upper = 0.33 (unstandardised)</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; Cauchy prior scale:           0.707</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt;     BF01 (equivalence) = 0.11</span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="kw">get_bf</span>(<span class="dt">object =</span> mod_equiv_raw)</a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; [1] 0.108721</span></a></code></pre></div>
+<p>Alternatively, if the raw data are not available, we can use summary statistics to compute a Bayes factor (cf. van Ravenzwaaij et al., 2019). The data were obtained from Steiner et al. (2015):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mod_equiv_sum &lt;-<span class="st"> </span><span class="kw">equiv_bf</span>(</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">n_x =</span> <span class="dv">560</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">n_y =</span> <span class="dv">538</span>,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dt">mean_x =</span> <span class="fl">8.683</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="dt">mean_y =</span> <span class="fl">8.516</span>,</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">sd_x =</span> <span class="fl">3.6</span>,</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dt">sd_y =</span> <span class="fl">3.6</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">mod_equiv_sum</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Equivalence analysis</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; --------------------</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; Data:                         summary data</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; H0 (equivalence):             mu_y == mu_x</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; H1 (non-equivalence):         mu_y != mu_x</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; Equivalence interval:         Lower = -0.00; Upper = 0.00 (standardised)</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;                               Lower = -0.00; Upper = 0.00 (unstandardised)</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; Cauchy prior scale:           0.707</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt;     BF01 (equivalence) = 11.05</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="kw">get_bf</span>(<span class="dt">object =</span> mod_equiv_sum)</a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; [1] 11.04945</span></a></code></pre></div>
+</div>
+<div id="the-non-inferiority-test-infer_bf" class="section level2">
+<h2>The non-inferiority test (<code>infer_bf()</code>)</h2>
+<p>With <code>infer_bf()</code> we can test whether the experimental group is not worse by a certain amount–which is given by the non-inferiority margin–than the control group. Importantly, sometimes low and sometimes high values on the measure of interest represent non-inferiority, which can be specified with the argument <code>direction</code>. The default is that high values represent non-inferiority. The non-inferiority margin can be specified with the argument <code>ni_margin</code>. The argument <code>ni_margin_std</code> can be used to specify whether the non-inferiority margin is given in standardised (TRUE; the default) or unstandardised (FALSE) units.</p>
+<p>We can use the raw data to compute a Bayes factor:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">mod_infer_raw &lt;-<span class="st"> </span><span class="kw">infer_bf</span>(</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="dt">x =</span> data<span class="op">$</span>dv[data<span class="op">$</span>condition <span class="op">==</span><span class="st"> &quot;con&quot;</span>],</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="dt">y =</span> data<span class="op">$</span>dv[data<span class="op">$</span>condition <span class="op">==</span><span class="st"> &quot;exp&quot;</span>],</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="dt">ni_margin =</span> <span class="fl">1.5</span>,</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="dt">ni_margin_std =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">mod_infer_raw</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; Non-inferiority analysis</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; ------------------------</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; Data:                         raw data</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; H0 (inferiority):             mu_y - mu_x &lt; -ni_margin</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; H1 (non-inferiority):         mu_y - mu_x &gt; -ni_margin</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; Non-inferiority margin:       0.45 (standardised)</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;                               1.50 (unstandardised)</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; Cauchy prior scale:           0.707</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;     BF10 (non-inferiority) = 3.18e+10</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="kw">get_bf</span>(<span class="dt">object =</span> mod_infer_raw)</a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; [1] 31818926201</span></a></code></pre></div>
+<p>Alternatively, if the raw data are not available, we can use summary statistics to compute a Bayes factor (cf. van Ravenzwaaij et al., 2019). The data were obtained from Andersson et al. (2013):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">mod_infer_sum &lt;-<span class="st"> </span><span class="kw">infer_bf</span>(</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="dt">n_x =</span> <span class="dv">33</span>,</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">n_y =</span> <span class="dv">32</span>,</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="dt">mean_x =</span> <span class="fl">17.1</span>,</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">  <span class="dt">mean_y =</span> <span class="fl">13.6</span>,</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">  <span class="dt">sd_x =</span> <span class="dv">8</span>,</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">  <span class="dt">sd_y =</span> <span class="fl">9.8</span>,</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">  <span class="dt">ni_margin =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">  <span class="dt">ni_margin_std =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">  <span class="dt">direction =</span> <span class="st">&quot;low&quot;</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">mod_infer_sum</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; Non-inferiority analysis</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; ------------------------</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Data:                         summary data</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; H0 (inferiority):             mu_y - mu_x &gt; ni_margin</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; H1 (non-inferiority):         mu_y - mu_x &lt; ni_margin</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Non-inferiority margin:       0.22 (standardised)</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;                               2.00 (unstandardised)</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; Cauchy prior scale:           0.707</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt;     BF10 (non-inferiority) = 90.52</span></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; ******************************</span></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="kw">get_bf</span>(<span class="dt">object =</span> mod_infer_sum)</a>
+<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt; [1] 90.51541</span></a></code></pre></div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Gronau, Q. F., Ly, A., &amp; Wagenmakers, E.-J. (2019). Informed Bayesian t-tests. <em>The American Statistician</em>.</p>
+<p>Rouder, J. N., Speckman, P. L., Sun, D., Morey, R. D., &amp; Iverson, G. (2009). Bayesian t tests for accepting and rejecting the null hypothesis. <em>Psychonomic Bulletin &amp; Review</em>, <em>16</em>(2), 225-237.</p>
+<p>Schönbrodt, F. D., Wagenmakers, E.-J., Zehetleitner, M., &amp; Perugini, M. (2017). Sequential hypothesis testing with Bayes factors: Efficiently testing mean differences. <em>Psychological Methods</em>, <em>22</em>(2), 322-339.</p>
+<p>van Ravenzwaaij, D., Monden, R., Tendeiro, J. N., &amp; Ioannidis, J. P. A. (2019). Bayes factors for superiority, non-inferiority, and equivalence designs. <em>BMC Medical Research Methodology</em>, <em>19</em>(1), 71.</p>
+<p>Wagenmakers, E.-J., Marsman, M., Jamil, T., Ly, A., Verhagen, J., Love, J., … Morey, R. D. (2018). Bayesian inference for psychology. Part I: Theoretical advantages and practical ramifications. <em>Psychonomic Bulletin &amp; Review</em>, <em>25</em>(1), 35-57.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
