@@ -7,32 +7,10 @@ biomedical research designs (see van Ravenzwaaij et al., 2019).
 Implemented are functions to test the equivalence (`equiv_bf()`),
 non-inferiority (`infer_bf()`), and superiority (`super_bf()`) of an
 experimental group (e.g., a new medication) compared to a control group
-(e.g., a placebo or an already existing medication). A special focus of
-`baymedr` lies on a user-friendly interface, so that a wide variety or
-researchers (i.e., not only statisticians) can utilise `baymedr` for
-their analyses.
-
-The Bayesian approach to inference has several advantages over the
-conventional frequentist approach. To mention only a few, with Bayesian
-inference it is legitimate to monitor results during data collection and
-decide to stop or continue data collection based on the inspection of
-interim analyses. This is considered a bad practice within the
-frequentist framework because it would result in an inflated Type I
-error rate (e.g., Schönbrodt et al., 2017). Furthermore, null hypothesis
-significance tests and the corresponding *p*-values do not allow for the
-quantification of evidence for the null hypothesis (e.g., Wagenmakers et
-al., 2018). The Bayesian framework remedies this shortcoming, which is
-particularly important for the equivalence design (van Ravenzwaaij et
-al., 2019). Lastly, in some situations the frequentist approaches to
-equivalence and non-inferiority tests bear certain interpretational
-ambiguities. For instance, when the confidence interval of the
-difference between the two group means fully lies between the
-non-inferiority margin and 0, this means that the experimental group is
-non-inferior with regard to the non-inferiority margin but inferior with
-regard to 0. The same applies to the equivalence design (van Ravenzwaaij
-et al., 2019). Fortunately, these ambiguities are fully resolved within
-the Bayesian framework. For a more thorough discussion of Bayesian
-advantages, see, for example, Wagenmakers et al. (2018).
+(e.g., a placebo or an already existing medication) on a continuous
+dependent variable. A special focus of `baymedr` lies on a user-friendly
+interface, so that a wide variety or researchers (i.e., not only
+statisticians) can utilize `baymedr` for their analyses.
 
 ## Installation and attaching
 
@@ -50,7 +28,7 @@ You can install the latest development version of `baymedr` from
 devtools::install_github("maxlinde/baymedr")
 ```
 
-Subsequently, you can attach `baymedr`, so that it is ready to use:
+Subsequently, you can load `baymedr`, so that it is ready to use:
 
 ``` r
 library(baymedr)
@@ -66,7 +44,8 @@ summary statistics (if arguments `n_x`, `n_y`, `mean_x`, `mean_y`,
 user has the option to specify `ci_margin` and `ci_level` instead of
 `sd_x` and `sd_y`. In general, arguments with ‘x’ as a name or suffix
 correspond to the control group and those with ‘y’ as a name or suffix
-refer to the experimental group.
+refer to the experimental group. Importantly, the dependent variable
+must be continuous in order to obtain valid results.
 
 Usage of the functions for equivalence (`equiv_bf()`), non-inferiority
 (`infer_bf()`), and superiority designs (`super_bf()`), results in S4
@@ -76,13 +55,14 @@ console by printing the created S4 object. To extract the Bayes factor
 from one of the three S4 objects, use the function `get_bf()`.
 
 The Bayes factors resulting from `super_bf()` and `infer_bf()` quantify
-evidence in favour of the alternative hypothesis (i.e., superiority and
-non-inferiority, respectively), which is indicated by BF01. In contrast,
-the Bayes factor resulting from `equiv_bf()` quantifies evidence in
-favour of the null hypothesis (i.e., equivalence), indicated by BF01. In
-case the evidence for the other hypothesis is desired, the user can take
-the reciprocal of the Bayes factor (i.e., BF01 = 1 / BF10 and BF10 = 1 /
-BF01).
+evidence in favor of the data under the alternative hypothesis (i.e.,
+superiority and non-inferiority, respectively) relative to the data
+under the null hypothesis. In contrast, the Bayes factor resulting from
+`equiv_bf()` quantifies evidence in favor of the data under the null
+hypothesis (i.e., equivalence) relative to the data under the
+alternative hypothesis. In case the evidence for the data under the
+other hypothesis is desired, the user can take the reciprocal of the
+Bayes factor.
 
 ## The Cauchy prior distribution
 
@@ -95,15 +75,15 @@ al., 2019). If relevant information is available, this knowledge could
 be expressed in an idiosyncratic prior distribution. Most of the time,
 however, relevant information is missing. In that case, it is reasonable
 to define a prior distribution that is as objective as possible. It has
-been argued that the Cauchy probability density function represents such
-a function (see, e.g., Rouder et al., 2009). The standard Cauchy
-distribution resembles a standard Normal distribution, except that the
-Cauchy distribution has less mass at the centre but instead heavier
-tails. The centre of the distribution is determined by the location
-parameter, while the width is specified by the scale parameter. By
-varying the scale of the Cauchy prior, the user can change the range of
-reasonable effect sizes. This is accomplished with the argument
-`prior_scale`.
+been argued that the Cauchy probability density function centered on 0
+represents such a function (see, e.g., Rouder et al., 2009). The
+standard Cauchy distribution resembles a standard Normal distribution,
+except that the Cauchy distribution has less mass at the center but
+instead heavier tails. The center of the distribution is determined by
+the location parameter, while the width is specified by the scale
+parameter. By varying the scale of the Cauchy prior, the user can change
+the range of reasonable effect sizes. This is accomplished with the
+argument `prior_scale`.
 
 ## Random example data
 
@@ -146,12 +126,14 @@ data[c(1:5, 151:155), ]
 With `super_bf()` we can test whether the experimental group is better
 than the control group. Importantly, sometimes low and sometimes high
 values on the measure of interest represent superiority, which can be
-specified with the argument `direction`. The default is that high values
-represent superiority. Moreover, research practices diverge on whether a
-one-tailed test should be conducted or a two-tailed test with subsequent
-confirmation that the results follow the expected direction. This can be
-specified with the argument `alternative`, for which the default is a
-one-sided test.
+specified with the argument `direction`. In the case where low values
+represent superiority we have BF-0, indicating that we quantify evidence
+for the data under the negative alternative hypothesis (i.e., H-)
+relative to the null hypothesis (i.e., H0). In the case where high
+values represent superiority we have BF+0, indicating that we quantify
+evidence for the data under the positive alternative hypothesis (i.e.,
+H+) relative to the null hypothesis (i.e., H0). The default is that high
+values represent superiority.
 
 We can use the raw data to compute a Bayes factor:
 
@@ -167,10 +149,10 @@ mod_super_raw
 #> --------------------
 #> Data:                         raw data
 #> H0 (non-superiority):         mu_y == mu_x
-#> H1 (superiority):             mu_y > mu_x
+#> H+ (superiority):             mu_y > mu_x
 #> Cauchy prior scale:           0.707
 #> 
-#>     BF10 (superiority) = 44.00
+#>     BF+0 (superiority) = 44.00
 #> ******************************
 
 get_bf(object = mod_super_raw)
@@ -189,8 +171,7 @@ mod_super_sum <- super_bf(
   mean_y = 63.6,
   ci_margin = (15.5 - (-6.5)) / 2,
   ci_level = 0.95,
-  direction = "low",
-  alternative = "one.sided"
+  direction = "low"
 )
 
 mod_super_sum
@@ -199,10 +180,10 @@ mod_super_sum
 #> --------------------
 #> Data:                         summary data
 #> H0 (non-superiority):         mu_y == mu_x
-#> H1 (superiority):             mu_y < mu_x
+#> H- (superiority):             mu_y < mu_x
 #> Cauchy prior scale:           0.707
 #> 
-#>     BF10 (superiority) = 0.24
+#>     BF-0 (superiority) = 0.24
 #> ******************************
 
 get_bf(object = mod_super_sum)
@@ -212,13 +193,16 @@ get_bf(object = mod_super_sum)
 ## The equivalence test (`equiv_bf()`)
 
 With `equiv_bf()` we can test whether the experimental and the control
-groups are equivalent. With the argument `interval`, an equivalence
-interval can be specified. The argument `interval_std` can be used to
-specify whether the equivalence interval is given in standardised (TRUE;
-the default) or unstandardised (FALSE) units. However, in contrast to
-the frequentist equivalence test, `equiv_bf()` can also incorporate a
-point null hypothesis, which constitutes the default in `equiv_bf()`
-(i.e., `interval` = 0).
+groups are (practically) equivalent. With the argument `interval`, an
+equivalence interval can be specified. The argument `interval_std` can
+be used to specify whether the equivalence interval is given in
+standardized (TRUE; the default) or unstandardized (FALSE) units.
+However, in contrast to the frequentist equivalence test, `equiv_bf()`
+can also incorporate a point null hypothesis, which constitutes the
+default in `equiv_bf()` (i.e., `interval` = 0). The Bayes factor (i.e.,
+BF01) resulting from `equiv_bf()` quantifies evidence for the data under
+the null hypothesis (i.e., H0) relative to the two-sided alternative
+hypothesis (i.e., H1).
 
 We can use the raw data to compute a Bayes factor:
 
@@ -283,14 +267,20 @@ get_bf(object = mod_equiv_sum)
 
 With `infer_bf()` we can test whether the experimental group is not
 worse by a certain amount–which is given by the non-inferiority
-margin–than the control group. Importantly, sometimes low and
-sometimes high values on the measure of interest represent
-non-inferiority, which can be specified with the argument `direction`.
-The default is that high values represent non-inferiority. The
-non-inferiority margin can be specified with the argument `ni_margin`.
-The argument `ni_margin_std` can be used to specify whether the
-non-inferiority margin is given in standardised (TRUE; the default) or
-unstandardised (FALSE) units.
+margin–than the control group. Importantly, sometimes low and sometimes
+high values on the dependent variable represent non-inferiority, which
+can be specified with the argument `direction`. In the case where low
+values represent non-inferiority we have BF-+, indicating that we
+quantify evidence for the data under the negative alternative hypothesis
+(i.e., H-) relative to the positive null hypothesis (i.e., H+). In the
+case where high values represent non-superiority we have BF+-,
+indicating that we quantify evidence for the data under the positive
+alternative hypothesis (i.e., H+) relative to the negative null
+hypothesis (i.e., H-). The default is that high values represent
+non-inferiority. The non-inferiority margin can be specified with the
+argument `ni_margin`. The argument `ni_margin_std` can be used to
+specify whether the non-inferiority margin is given in standardized
+(TRUE; the default) or unstandardized (FALSE) units.
 
 We can use the raw data to compute a Bayes factor:
 
@@ -307,17 +297,17 @@ mod_infer_raw
 #> Non-inferiority analysis
 #> ------------------------
 #> Data:                         raw data
-#> H0 (inferiority):             mu_y - mu_x < -ni_margin
-#> H1 (non-inferiority):         mu_y - mu_x > -ni_margin
+#> H- (inferiority):             mu_y - mu_x < -ni_margin
+#> H+ (non-inferiority):         mu_y - mu_x > -ni_margin
 #> Non-inferiority margin:       0.45 (standardised)
 #>                               1.50 (unstandardised)
 #> Cauchy prior scale:           0.707
 #> 
-#>     BF10 (non-inferiority) = 3.18e+10
+#>     BF+- (non-inferiority) = 6.85e+10
 #> ******************************
 
 get_bf(object = mod_infer_raw)
-#> [1] 31814264413
+#> [1] 68546673627
 ```
 
 Alternatively, if the raw data are not available, we can use summary
@@ -342,23 +332,23 @@ mod_infer_sum
 #> Non-inferiority analysis
 #> ------------------------
 #> Data:                         summary data
-#> H0 (inferiority):             mu_y - mu_x > ni_margin
-#> H1 (non-inferiority):         mu_y - mu_x < ni_margin
+#> H+ (inferiority):             mu_y - mu_x > ni_margin
+#> H- (non-inferiority):         mu_y - mu_x < ni_margin
 #> Non-inferiority margin:       0.22 (standardised)
 #>                               2.00 (unstandardised)
 #> Cauchy prior scale:           0.707
 #> 
-#>     BF10 (non-inferiority) = 90.52
+#>     BF-+ (non-inferiority) = 79.59
 #> ******************************
 
 get_bf(object = mod_infer_sum)
-#> [1] 90.51541
+#> [1] 79.59441
 ```
 
 ## References
 
-Gronau, Q. F., Ly, A., & Wagenmakers, E.-J. (2019). Informed Bayesian
-t-tests. *The American Statistician*.
+Gronau, Q. F., Ly, A., & Wagenmakers, E.-J. (2020). Informed Bayesian
+t-tests. *The American Statistician*, *74*(2), 137-143.
 
 Rouder, J. N., Speckman, P. L., Sun, D., Morey, R. D., & Iverson, G.
 (2009). Bayesian t tests for accepting and rejecting the null

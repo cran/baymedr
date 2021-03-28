@@ -7,17 +7,16 @@
 \title{baymedr: Computation of Bayes Factors for Common Biomedical Designs}
 \description{
 \code{baymedr} provides functions for the computation of Bayes factors for
-common biomedical research designs. At this point in time, functions for
-equivalence, non-inferiority, and superiority designs are implemented.
+common biomedical research designs.
 }
 \details{
 \tabular{ll}{ Package: \tab baymedr \cr Type: \tab Package \cr Version: \tab
-0.1.0 \cr License: \tab GPL-3 \cr Date: \tab 2019-10-17 \cr}
+0.1.1 \cr License: \tab GPL-3 \cr Date: \tab 2021-03-26 \cr}
 
 At this point in time, \code{baymedr} entails tests for the following
-research designs: \itemize{ \item Equivalence: \code{\link{equiv_bf}} \item
-Non-Inferiority: \code{\link{infer_bf}} \item Superiority:
-\code{\link{super_bf}} }
+research designs with a continuous outcome measure: \itemize{ \item
+Equivalence: \code{\link{equiv_bf}} \item Non-Inferiority:
+\code{\link{infer_bf}} \item Superiority: \code{\link{super_bf}} }
 }
 \seealso{
 Useful links: \itemize{ \item
