@@ -1,7 +1,7 @@
 Package: baymedr
 Title: Computation of Bayes Factors for Common Biomedical Designs
-Version: 0.1.1
-Date: 2021-03-26
+Version: 0.2
+Date: 2026-05-04
 Authors@R: c(
     person(given = "Maximilian",
            family = "Linde",
@@ -13,6 +13,11 @@ Authors@R: c(
            role= "aut",
            email = "d.van.ravenzwaaij@rug.nl",
            comment = c(ORCID = "0000-0002-5030-4091")),
+    person(given = "Jorge N.",
+           family = "Tendeiro",
+           role = "aut",
+           email = "tendeiro@hiroshima-u.ac.jp",
+           comment = c(ORCID = "0000-0003-1660-3642")),
     person(given = "Quentin F.",
            family = "Gronau",
            role = "ctb",
@@ -22,25 +27,30 @@ Description: BAYesian inference for MEDical designs in R. Functions for the
     computation of Bayes factors for common biomedical research designs. 
     Implemented are functions to test the equivalence (equiv_bf), 
     non-inferiority (infer_bf), and superiority (super_bf) of an experimental 
-    group compared to a control group on a continuous outcome measure. Bayes 
-    factors for these three tests can be computed based on raw data (x, y) or 
-    summary statistics (n_x, n_y, mean_x, mean_y, sd_x, sd_y [or ci_margin 
-    and ci_level]).
-Depends: R (>= 3.2.0)
-Imports: methods, rlang, stats, stringr
+    group compared to a control group on a continuous outcome measure, as well 
+    as functions for simulating survival data and calculating a Bayes factor 
+    for Cox proportional hazards models. Bayes factors for these tests can be 
+    computed based on raw data or summary statistics.
+Depends: R (>= 3.4.0)
+Imports: doParallel, foreach, methods, parallel, pso, rms, stats,
+        stringr, survival
 Suggests: knitr, rmarkdown, testthat
-VignetteBuilder: knitr
-RoxygenNote: 7.1.1
 License: GPL-3
 Encoding: UTF-8
 Language: en-US
 URL: https://github.com/maxlinde/baymedr
 BugReports: https://github.com/maxlinde/baymedr/issues
+Config/roxygen2/version: 8.0.0
 NeedsCompilation: no
-Packaged: 2021-03-26 15:03:46 UTC; maximilian
-Author: Maximilian Linde [aut, cre] (<https://orcid.org/0000-0001-8421-090X>),
-  Don van Ravenzwaaij [aut] (<https://orcid.org/0000-0002-5030-4091>),
-  Quentin F. Gronau [ctb] (<https://orcid.org/0000-0001-5510-6943>)
+Packaged: 2026-05-04 14:27:14 UTC; maxlinde
+Author: Maximilian Linde [aut, cre] (ORCID:
+    <https://orcid.org/0000-0001-8421-090X>),
+  Don van Ravenzwaaij [aut] (ORCID:
+    <https://orcid.org/0000-0002-5030-4091>),
+  Jorge N. Tendeiro [aut] (ORCID:
+    <https://orcid.org/0000-0003-1660-3642>),
+  Quentin F. Gronau [ctb] (ORCID:
+    <https://orcid.org/0000-0001-5510-6943>)
 Maintainer: Maximilian Linde <maximilian.linde.92@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-03-28 03:20:02 UTC
+Date/Publication: 2026-05-11 15:00:02 UTC

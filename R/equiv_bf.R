@@ -90,22 +90,23 @@
 #'   is shown by printing the object.
 #'
 #' @export
-#' @import rlang stats stringr
+#' @import stats stringr
 #'
-#' @references Gronau, Q. F., Ly, A., & Wagenmakers, E.-J. (2020). Informed
-#'   Bayesian t-tests. \emph{The American Statistician}, \emph{74}(2), 137-143.
+#' @references
+#'   Gronau, Q. F., Ly, A., & Wagenmakers, E.-J. (2020). Informed Bayesian
+#'   t-tests. \emph{The American Statistician}, \emph{74}, 137-143.
 #'
 #'   Liang, F., Paulo, R., Molina, G., Clyde, M. A., & Berger, J. O. (2008).
 #'   Mixtures of g priors for Bayesian variable selection. \emph{Journal of the
-#'   American Statistical Association}, \emph{103}(481), 410-423.
+#'   American Statistical Association}, \emph{103}, 410-423.
 #'
 #'   Rouder, J. N., Speckman, P. L., Sun, D., Morey, R. D., & Iverson, G.
 #'   (2009). Bayesian t tests for accepting and rejecting the null hypothesis.
-#'   \emph{Psychonomic Bulletin & Review}, \emph{16}(2), 225-237.
+#'   \emph{Psychonomic Bulletin & Review}, \emph{16}, 225-237.
 #'
 #'   van Ravenzwaaij, D., Monden, R., Tendeiro, J. N., & Ioannidis, J. P. A.
 #'   (2019). Bayes factors for superiority, non-inferiority, and equivalence
-#'   designs. \emph{BMC Medical Research Methodology}, \emph{19}(1), 71.
+#'   designs. \emph{BMC Medical Research Methodology}, \emph{19}, 71.
 #'
 #' @examples
 #' ## equiv_bf using raw data:
@@ -173,15 +174,17 @@ equiv_bf <- function(x = NULL,
                               !is.null(sd_y),
                               !is.null(ci_margin),
                               !is.null(ci_level))) {
-    abort(str_c(
+    stop(str_c(
       "Only 'x' and 'y' OR 'n_x', 'n_y', 'mean_x', 'mean_y', 'sd_x', and ",
       "'sd_y' (or 'ci_margin' and 'ci_level' instead of 'sd_x' and 'sd_y') ",
       "must be defined."
-    ))
+    ),
+    call. = FALSE)
   }
   if (xor(!is.null(x),
           !is.null(y))) {
-    abort("Both 'x' and 'y' must be defined.")
+    stop("Both 'x' and 'y' must be defined.",
+         call. = FALSE)
   }
   if (any(!is.null(n_x),
           !is.null(n_y),
@@ -193,17 +196,19 @@ equiv_bf <- function(x = NULL,
             is.null(mean_y)) ||
         ((is.null(sd_x) || is.null(sd_y)) &&
          (is.null(ci_margin) || is.null(ci_level)))) {
-      abort(str_c(
+      stop(str_c(
         "All 'n_x', 'n_y', 'mean_x', 'mean_y', 'sd_x', and 'sd_y' (or ",
         "'ci_margin' and 'ci_level' instead of 'sd_x' and 'sd_y') must be ",
         "defined."
-      ))
+      ),
+      call. = FALSE)
     }
 
     if (!xor(!is.null(sd_x) && !is.null(sd_y),
              !is.null(ci_margin) && !is.null(ci_level))) {
-      abort(str_c("Only 'sd_x' and 'sd_y' OR 'ci_margin' and 'ci_level' must ",
-                  "be defined."))
+      stop(str_c("Only 'sd_x' and 'sd_y' OR 'ci_margin' and 'ci_level' must ",
+                  "be defined."),
+           call. = FALSE)
     }
   }
   if (all(!is.null(n_x),
@@ -215,7 +220,8 @@ equiv_bf <- function(x = NULL,
           ))) {
     if (!is.null(ci_level) && (length(ci_level) > 1 || ci_level <= 0 ||
                                ci_level >= 1 || !is.numeric(ci_level))) {
-      abort("'ci_level' must be a single numeric value between 0 and 1.")
+      stop("'ci_level' must be a single numeric value between 0 and 1.",
+           call. = FALSE)
     }
     data <- list(type = "summary data",
                  data = list(n_x = n_x,
@@ -229,13 +235,16 @@ equiv_bf <- function(x = NULL,
   }
   if (!is.null(x) && !is.null(y)) {
     if (any(is.na(x)) || any(is.na(y))) {
-      abort("'x' and 'y' must not contain missing values.")
+      stop("'x' and 'y' must not contain missing values.",
+           call. = FALSE)
     }
     if (any(is.infinite(x)) || any(is.infinite(y))) {
-      abort("'x' and 'y' must not contain infinite values.")
+      stop("'x' and 'y' must not contain infinite values.",
+           call. = FALSE)
     }
     if (!is.numeric(x) || !is.numeric(y)) {
-      abort("'x' and 'y' must be numeric vectors.")
+      stop("'x' and 'y' must be numeric vectors.",
+           call. = FALSE)
     }
     n_x <- length(x)
     n_y <- length(y)
@@ -248,13 +257,16 @@ equiv_bf <- function(x = NULL,
                              y = y))
   }
   if (!is.numeric(prior_scale) || length(prior_scale) > 1) {
-    abort("'prior_scale' must be a single numeric value.")
+    stop("'prior_scale' must be a single numeric value.",
+         call. = FALSE)
   }
   if (!is.numeric(interval) || length(interval) > 2) {
-    abort("'interval' must be a numeric vector of length one or two.")
+    stop("'interval' must be a numeric vector of length one or two.",
+         call. = FALSE)
   }
   if (!is.logical(interval_std) || length(interval_std) > 1) {
-    abort("'interval_std' must be a single logical value.")
+    stop("'interval_std' must be a single logical value.",
+         call. = FALSE)
   }
   if (!is.null(sd_x) && !is.null(sd_y)) {
     sd_pooled <- sqrt(((n_x - 1) * sd_x ^ 2 + (n_y - 1) * sd_y ^ 2) /
@@ -286,7 +298,7 @@ equiv_bf <- function(x = NULL,
                   prior_loc = 0,
                   prior_scale = prior_scale,
                   prior_df = 1)
-    bf <- 1 / res[[1]]
+    bf <- 1 / res$bf_10
     h0 <- "mu_y == mu_x"
     h1 <- "mu_y != mu_x"
   } else {
@@ -309,10 +321,11 @@ equiv_bf <- function(x = NULL,
     post_dens <- cdf_t_upper - cdf_t_lower
     if (post_dens < 0) {
       post_dens <- 0
-      warn(str_c(
+      warning(str_c(
         "Numerical integration yields a posterior density slightly lower ",
         "than 0. The posterior density has been replaced by 0."
-      ))
+      ),
+      call. = FALSE)
     }
     prior_dens <- pcauchy(q = inter_std[[2]],
                           scale = prior_scale) - pcauchy(q = inter_std[[1]],
