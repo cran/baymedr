@@ -1,13 +1,13 @@
-2530ade26685cdc4a90092c9786c1670 *DESCRIPTION
-60344bb0fcab41c971c34557fb2a332a *NAMESPACE
-66539b3589c7649a8810a9f7af23bf1e *NEWS.md
+0970f9eab9fadc912f9d577c3a72a159 *DESCRIPTION
+2fd00710fa2dfde3a9494f8408efe1a5 *NAMESPACE
+65539998866189f39938b774cb347919 *NEWS.md
 7d269d2b4661ee18f9aae52cb9baf75a *R/bayes.R
-a0d52c0b19284780cc5231035a1e5786 *R/baymedr-package.R
+d4d3ef2b3eadfa146365b6eeea699f84 *R/baymedr-package.R
 0648133a38ae42a24b6b743b7d2038a8 *R/bf10_t.R
 c4dd2ffb77d1798ecab0f5eecf4b5944 *R/cdf_t.R
 a510e40181d49bce4d9a998880399b0b *R/coxph_bf.R
 ef744b717b50115b99a81df0dfec899c *R/coxph_data_sim.R
-42a9b312a6b03b9e4db4576570c7d712 *R/data_sim.R
+b7ef23bea0ea920fd42679554ae4c53d *R/data_sim.R
 c3184e20fa63c144c3f576c8094a32bf *R/def_classes.R
 6f80f4c22795ecbedf3946e527b4d968 *R/equiv_bf.R
 2a28b7341cb8c0637c93c4b0399ecd3e *R/get_bf.R
@@ -17,7 +17,7 @@ ff60b3f9a2bc1deb7e0224e331aa4246 *R/integrand_t.R
 29974950313b9ded18aba98b169d2a49 *R/posterior_t.R
 6922fdb63602d3b3198e6a84d5849e3e *R/super_bf.R
 f2d0e15b77a73b3a7af45173b655d4fc *README.md
-b3de4625eca77508a03ca8ff362a62f0 *man/baymedr-package.Rd
+f408c162aabe92d10696fbec415db8d9 *man/baymedr-package.Rd
 93a7da76c7c64c73b13d097d43134ab4 *man/coxph_bf.Rd
 77f330f7c353fd8a809d6c96034cdcd8 *man/coxph_data_sim.Rd
 f4768dd34933f235ff23e53f88c321f7 *man/equiv_bf.Rd

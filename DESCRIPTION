@@ -1,7 +1,7 @@
 Package: baymedr
 Title: Computation of Bayes Factors for Common Biomedical Designs
-Version: 0.2
-Date: 2026-05-04
+Version: 0.2.1
+Date: 2026-11-20
 Authors@R: c(
     person(given = "Maximilian",
            family = "Linde",
@@ -40,9 +40,9 @@ Encoding: UTF-8
 Language: en-US
 URL: https://github.com/maxlinde/baymedr
 BugReports: https://github.com/maxlinde/baymedr/issues
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
 NeedsCompilation: no
-Packaged: 2026-05-04 14:27:14 UTC; maxlinde
+Packaged: 2026-11-20 12:37:32 UTC; maxlinde
 Author: Maximilian Linde [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-8421-090X>),
   Don van Ravenzwaaij [aut] (ORCID:
@@ -53,4 +53,4 @@ Author: Maximilian Linde [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-5510-6943>)
 Maintainer: Maximilian Linde <maximilian.linde.92@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-05-11 15:00:02 UTC
+Date/Publication: 2026-11-23 09:50:02 UTC
